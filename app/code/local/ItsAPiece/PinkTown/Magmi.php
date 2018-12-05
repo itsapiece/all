@@ -14,19 +14,21 @@ class Magmi {
 	 * @return string
 	 */
 	private static function ini() {
+		/** @var array(string => string) $db */
+		$db  = \Mage::getConfig()->getResourceConnectionConfig('default_setup')->asArray();
 		$cfg = [
 			'[DATABASE]' => [
 				'connectivity' => 'net'
-				,'dbname' => 'itsapiece_com'
-				,'host' => 'localhost'
-				,'password' => 'vertrigo'
+				,'dbname' => $db['dbname']
+				,'host' => $db['host']
+				,'password' => $db['password']
 				,'port' => '3306'
 				,'resource' => 'default_setup'
 				,'table_prefix' => ''
-				,'user' => 'root'
+				,'user' => $db['username']
 			]
 			,'[MAGENTO]' => [
-				'basedir' => 'C:/work/clients/itsapiece.com/code'
+				'basedir' => \Mage::getBaseDir()
 				,'version' => '1.9.x'
 			]
 			,'[GLOBAL]' => [

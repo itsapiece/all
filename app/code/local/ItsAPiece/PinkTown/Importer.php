@@ -5,8 +5,5 @@ class Importer {
 	/**
 	 * 2018-12-05
 	 */
-	static function process() {
-		Magmi::configure();
-		echo __METHOD__;
-	}
+	static function process() {Magmi::configure();}
 }
