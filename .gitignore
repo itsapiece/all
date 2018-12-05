@@ -7,4 +7,5 @@
 !/README.md
 !app/code/local/ItsAPiece/**/*
 !app/etc/modules/ItsAPiece_PinkTown.xml
+!shell/itsapiece.php
 magmi/
