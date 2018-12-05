@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<ItsAPiece_PinkTown>
+			<active>true</active>
+			<codePool>local</codePool>
+		</ItsAPiece_PinkTown>
+	</modules>
+</config>

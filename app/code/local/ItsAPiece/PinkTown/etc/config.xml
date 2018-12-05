@@ -1,0 +1,9 @@
+<?xml version='1.0'?>
+<config>
+	<modules>
+		<ItsAPiece_PinkTown>
+			<version>0.0.1</version>
+			<author>Dmitry Fedyuk</author>
+		</ItsAPiece_PinkTown>
+	</modules>
+</config>
