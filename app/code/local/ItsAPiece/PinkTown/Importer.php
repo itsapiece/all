@@ -24,23 +24,26 @@ final class Importer {
 		$keys = array_shift($f);
 		$f = array_filter($f, function($v) {return '' !== trim($v[0]);});
 		$f = array_map(function($v) use($keys) {return array_combine($keys, $v);}, $f);
-		df_log(array_values($f), 'products.json');
+		//df_log(array_values($f), 'products.json');
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/** @var array(string => P) $pMap */
-		$pMap = array_combine(array_map(function(P $p) {return $p->getSku();}, $pc->getItems()), $pc->getItems());
+		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		foreach ($f as $d) {
-			$r = new Row($d); /** @var Row $r */
-			/** @var array(string => mixed) $d */
-			$sku = $r->sku(); /** @var string $sku */
-			if ($p = dfa($pMap, $sku)) { /** @var P $p */
-				//df_log("Updating: $sku");
-				Updater::p($p, $r);
+			try {
+				$r = new Row($d); /** @var Row $r */
+				/** @var array(string => mixed) $d */
+				$sku = $r->sku(); /** @var string $sku */
+				if ($p = dfa($pMap, $sku)) { /** @var P $p */
+					//df_log("Updating: $sku");
+					Updater::p($p, $r);
+				}
+				else {
+					//df_log("Inserting: $sku");
+					//Inserter::p($d);
+				}
 			}
-			else {
-				//df_log("Inserting: $sku");
-				//Inserter::p($d);
-			}
+			catch (\Exception $e) {df_log($e->getMessage());}
 			//\Mage::log($d['sku'], null, isset($pMap[$d['sku']]) ? 'exist.log' : 'new.log');
 		}
 		//file_put_contents(\Mage::getBaseDir('var') . '/log/skus.log', implode("\n", array_column($f, 0)));

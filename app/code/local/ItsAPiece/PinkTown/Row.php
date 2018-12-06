@@ -39,13 +39,23 @@ final class Row {
 	function a() {return $this->_a;}
 
 	/**
+	 * 2018-12-07
+	 * Magento uses the «Matt» spelling, the `Drop_Ship_Product_Feed.csv` file uses the «Matte» spelling.
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return string
+	 */
+	function color() {return str_replace('Matte', 'Matt', $this->v('color'));}
+
+	/**
 	 * 2018-12-06
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
 	 * @return string
 	 */
 	function desc() {return $this->v('short_description');}
 
 	/**
 	 * 2018-12-06
+	 * @used-by \ItsAPiece\PinkTown\Updater::uName()
 	 * @return string
 	 */
 	function name() {return $this->v('title');}
@@ -55,6 +65,13 @@ final class Row {
 	 * @return string
 	 */
 	function sku() {return $this->v('sku');}
+
+	/**
+	 * 2018-12-07
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return float
+	 */
+	function weight() {return floatval($this->v('weight'));}
 
 	/**
 	 * 2018-12-06
