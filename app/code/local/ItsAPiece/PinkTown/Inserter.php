@@ -2,7 +2,7 @@
 namespace ItsAPiece\PinkTown;
 use Mage_Catalog_Model_Product as P;
 // 2018-12-06
-class Inserter {
+final class Inserter {
 	/**
 	 * 2018-12-06
 	 * @used-by \ItsAPiece\PinkTown\Importer::p()
