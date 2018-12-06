@@ -4,7 +4,7 @@ namespace ItsAPiece\PinkTown;
 class Magmi {
 	/**
 	 * 2018-12-05
-	 * @used-by \ItsAPiece\PinkTown\Importer::process()
+	 * @used-by \ItsAPiece\PinkTown\Importer::p()
 	 */
 	static function configure() {file_put_contents (\Mage::getBaseDir() . '/magmi/conf/magmi.ini', self::ini());}
 
