@@ -8,11 +8,53 @@ final class Updater {
 	 * @used-by p()
 	 */
 	private function _p() {
-		$this->updateName();
+		$this->uName();
+		$this->uDesc();
 		//$this->_p->save();
 	}
 
-	private function updateName() {
+	private function uDesc() {
+		$new = $this->_r->desc(); /** @var string $new */
+		$prevL = $this->_p['description']; /** @var string $prevL */
+		$prevS = $this->_p['short_description']; /** @var string $prevL */
+		/**
+		 * 2018-12-06
+		 * Only a few products have a short description in Magento.
+		 * The full list:
+		 * PEC3188BLKRD: Body Chains
+		 * PEC3203BROGD: Body Chains
+		 * PEC3203WHTGD: Body Chains
+		 * PEC3204BROGD: Body Chains
+		 * PEC3204WHTGD: Body Chains
+		 * CHE2750BLUGD: Wear your favorite stone color with this classic earrings. Post Back Closure. 4.5 Inches Long.
+		 * VIE0069PNKGD: Cute and Romantic Pink Gold Stone Earring. Post Back Closure.
+		 * CHE2938CLEGD: Gold twisted metal drop earrings with clear round stones. Post back closure
+		 * TKN0203CREGD: Gold metal necklace set with dropping cream pearls. Lobster clasp closure
+		 * HYE180CLEGD: Gold metal linked stud earrings with clear stones. Post back closure
+		 * PEN1208REDGD: Gold metal chain
+		 */
+		if ($prevS) {
+			//df_log("{$this->_p->getSku()}: $prevS");
+		}
+		if ($new !== $prevL) {
+			/*df_log([
+				'sku' => $this->_p->getSku()
+				,'new' => $new
+				,'prevL' => $prevL
+			]);*/
+		}
+		/*df_log([
+			'new' => $new
+			,'prevL' => $prevL
+			,'prevS' => $prevS
+		]);*/
+	}
+
+	/**
+	 * 2018-12-06
+	 * @used-by _p()
+	 */
+	private function uName() {
 		$sku = $this->_r->sku(); /** @var string $sku */
 		$name = $this->_r->name(); /** @var string $name */
 		/**
@@ -21,7 +63,7 @@ final class Updater {
 		 * I do not want to re-write the product's name in Magento in this case.
 		 * An example of such product:
 		 *	{
-		 *		"additional_ Image_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/YB04241MLTRD_2.jpg",
+		 *		"additional_i"additional_image_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/BAN1413WHTGD_2.jpg",mage_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/YB04241MLTRD_2.jpg",
 		 *		"category": "Jewelry",
 		 *		"color": "Multi Color",
 		 *		"image1_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/YB04241MLTRD.jpg",
@@ -60,8 +102,8 @@ final class Updater {
 			 */
 			!df_contains($prev, $name)
 		) {
-			df_log("Old Name: {$this->_p->getName()}");
-			df_log("New name: {$name}");
+			//df_log("Old Name: {$this->_p->getName()}");
+			//df_log("New name: {$name}");
 			$this->_p['name'] = $name;
 		}
 		else {

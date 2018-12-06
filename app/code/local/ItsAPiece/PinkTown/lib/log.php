@@ -9,5 +9,6 @@ function df_log($m, $file = 'mage2pro.log') {
 	if (df_my()) {
 		echo $m;
 	}
-	file_put_contents(\Mage::getBaseDir('var') . "/log/$file", $m, FILE_APPEND);
+	mkdir($dir = \Mage::getBaseDir('var') . "/log");
+	file_put_contents("$dir/$file", $m, FILE_APPEND);
 }

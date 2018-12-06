@@ -15,15 +15,16 @@ final class Importer {
 		Magmi::configure();
 		$f = array_map('str_getcsv',
 			explode("\r\n",
-				str_replace("\n\"", '"',
-					file_get_contents(\Mage::getBaseDir() . '/_my/Drop_Ship_Product_Feed.csv')
-				)
+				strtr(file_get_contents(\Mage::getBaseDir() . '/_my/Drop_Ship_Product_Feed.csv'), [
+					"\n\"" => '"'
+					,'additional_ Image_url' => 'additional_image_url'
+				])
 			)
 		);
 		$keys = array_shift($f);
 		$f = array_filter($f, function($v) {return '' !== trim($v[0]);});
 		$f = array_map(function($v) use($keys) {return array_combine($keys, $v);}, $f);
-		//df_log(array_values($f), 'products.json');
+		df_log(array_values($f), 'products.json');
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/** @var array(string => P) $pMap */
@@ -33,7 +34,7 @@ final class Importer {
 			/** @var array(string => mixed) $d */
 			$sku = $r->sku(); /** @var string $sku */
 			if ($p = dfa($pMap, $sku)) { /** @var P $p */
-				df_log("Updating: $sku");
+				//df_log("Updating: $sku");
 				Updater::p($p, $r);
 			}
 			else {

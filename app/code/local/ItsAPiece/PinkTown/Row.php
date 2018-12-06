@@ -4,6 +4,7 @@ namespace ItsAPiece\PinkTown;
  * 2018-12-06
  * A row's structure:
  *	{
+ * 		"additional_image_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/BAN1413WHTGD_2.jpg",
  *		"category": "Jewelry",
  *		"color": "White",
  *		"image1_url": "https://www.pinktownusa.com/assets/Image/Product/detailsbig/BAN1413WHTGD.jpg",
@@ -36,6 +37,12 @@ final class Row {
 	 * @return array(string => mixed)
 	 */
 	function a() {return $this->_a;}
+
+	/**
+	 * 2018-12-06
+	 * @return string
+	 */
+	function desc() {return $this->v('short_description');}
 
 	/**
 	 * 2018-12-06
