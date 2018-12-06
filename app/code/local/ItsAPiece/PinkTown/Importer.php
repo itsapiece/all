@@ -22,7 +22,7 @@ class Importer {
 		$keys = array_shift($f);
 		$f = array_filter($f, function($v) {return '' !== trim($v[0]);});
 		$f = array_map(function($v) use($keys) {return array_combine($keys, $v);}, $f);
-		df_log(array_values($f), 'products.json');
+		//df_log(array_values($f), 'products.json');
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/** @var array(string => P) $pMap */

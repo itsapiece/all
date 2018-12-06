@@ -9,5 +9,7 @@ class Updater {
 	 * @param P $p
 	 * @param array(string => string) $d
 	 */
-	static function p(P $p, array $d) {}
+	static function p(P $p, array $d) {
+		xdebug_break();
+	}
 }
