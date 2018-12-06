@@ -29,12 +29,12 @@ final class Importer {
 		/** @var array(string => P) $pMap */
 		$pMap = array_combine(array_map(function(P $p) {return $p->getSku();}, $pc->getItems()), $pc->getItems());
 		foreach ($f as $d) {
-			$row = new Row($d); /** @var Row $row */
+			$r = new Row($d); /** @var Row $r */
 			/** @var array(string => mixed) $d */
-			$sku = $d['sku']; /** @var string $sku */
+			$sku = $r->sku(); /** @var string $sku */
 			if ($p = dfa($pMap, $sku)) { /** @var P $p */
 				df_log("Updating: $sku");
-				Updater::p($p, $d);
+				Updater::p($p, $r);
 			}
 			else {
 				//df_log("Inserting: $sku");

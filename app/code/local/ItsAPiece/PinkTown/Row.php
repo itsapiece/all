@@ -33,6 +33,18 @@ final class Row {
 
 	/**
 	 * 2018-12-06
+	 * @return array(string => mixed)
+	 */
+	function a() {return $this->_a;}
+
+	/**
+	 * 2018-12-06
+	 * @return string
+	 */
+	function name() {return $this->v('title');}
+
+	/**
+	 * 2018-12-06
 	 * @return string
 	 */
 	function sku() {return $this->v('sku');}
