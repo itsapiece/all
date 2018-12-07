@@ -26,7 +26,7 @@ final class Tags {
         if ($add) {
         	df_log("{$p->getSku()}: adding tags: %s.", [implode(', ', df_quote($add))]);
 			foreach ($add as $ts) {  /** @var string $ts */
-				if ($t = dfa(self::mapAll(), $ts)) { /** @var T $t */
+				if (!($t = dfa(self::mapAll(), $ts))) { /** @var T $t */
 					$t = \Mage::getModel('tag/tag');
 					$t->setName($ts);
 					$t->setStatus(T::STATUS_APPROVED);
