@@ -24,7 +24,7 @@ final class Tags {
 		// \Mage::app()->getStore()->getId() returns `1`;
         $storeId = self::storeId(); /** @var int $storeId */
         if ($add) {
-        	df_log("{$p->getSku()}: adding tags: %s." . implode(', ', df_quote($add)));
+        	df_log("{$p->getSku()}: adding tags: %s.", [implode(', ', df_quote($add))]);
 			foreach ($add as $ts) {  /** @var string $ts */
 				if ($t = dfa(self::mapAll(), $ts)) { /** @var T $t */
 					$t = \Mage::getModel('tag/tag');
