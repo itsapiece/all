@@ -78,6 +78,13 @@ final class Row {
 	/**
 	 * 2018-12-07
 	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return int
+	 */
+	function qty() {return intval($this->v('quantity'));}
+
+	/**
+	 * 2018-12-07
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
 	 * @return float
 	 */
 	function weight() {return floatval($this->v('weight'));}

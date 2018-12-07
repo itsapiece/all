@@ -8,10 +8,11 @@ final class Updater {
 	 * @used-by p()
 	 */
 	private function _p() {
-		//A\Color::p($this->_p, $this->_r->color());
+		A\Color::p($this->_p, $this->_r->color());
 		A\Desc::p($this->_p, $this->_r->desc());
 		A\Material::p($this->_p, $this->_r->material());
 		A\Name::p($this->_p, $this->_r);
+		A\Qty::p($this->_p, $this->_r->qty());
 		A\Weight::p($this->_p, $this->_r->weight());
 		//$this->_p->save();
 	}
