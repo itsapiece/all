@@ -15,14 +15,21 @@ abstract class RefBook {
 	 */
 	final static function p(P $p, $new) {
 		$n = df_class_llc(get_called_class()); /** @var string $n */
-		$prev = $p->getAttributeText($n); /** @var string $prev */
-		if ($new !== $prev) {
+		if (0 !== strcasecmp($new, $prev = $p->getAttributeText($n))) { /** @var string $prev */
 			df_log(['sku' => $p->getSku(), 'new' => $new, 'prev' => $prev]);
 			$a = $p->getResource()->getAttribute($n); /** @var A $a */
 			df_assert($a->usesSource());
-			$id = $a->getSource()->getOptionId($new);
-			df_assert($id);
-			$p[$n] = $id;
+			if (!($id = $a->getSource()->getOptionId($new))) {
+				df_log("Adding the «{$new}» option to the «{$n}» attribute.");
+				$options = $a->getSource()->getAllOptions(false);
+				$k = 'option_' . (1 + count($options)); /** @var string $k */
+				$a->addData(['option' => ['order' => [$k => 0], 'value' => [$k => [$new]]]]);
+				$a->save();
+				$p->getResource()->unsetAttributes($n);
+				$id = $a->getSource()->getOptionId($new);
+				df_assert($id);
+			}
+			$p->setData($n, $id);
 		}
 	}
 }

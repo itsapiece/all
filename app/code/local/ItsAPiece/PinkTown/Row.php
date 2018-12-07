@@ -85,6 +85,13 @@ final class Row {
 	/**
 	 * 2018-12-07
 	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return string
+	 */
+	function size() {return str_replace('  inches', ' inches', $this->v('size'));}
+
+	/**
+	 * 2018-12-07
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
 	 * @return float
 	 */
 	function weight() {return floatval($this->v('weight'));}

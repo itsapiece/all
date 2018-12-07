@@ -59,10 +59,7 @@ final class Name {
 		) {
 			//df_log("Old Name: {$this->_p->getName()}");
 			//df_log("New name: {$name}");
-			$p['name'] = $name;
-		}
-		else {
-			//xdebug_break();
+			$p->setData('name', $name);
 		}
 	}
 }

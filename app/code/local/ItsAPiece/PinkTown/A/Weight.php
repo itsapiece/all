@@ -9,9 +9,9 @@ final class Weight {
 	 * @param float $new
 	 */
 	static function p(P $p, $new) {
-		$prev = $p->getWeight(); /** @var float $prev */
+		$prev = floatval($p->getWeight()); /** @var float $prev */
 		if ($prev !== $new) {
-			$p['weight'] = $new;
+			$p->setData('weight', $new);
 		}
 	}
 }
