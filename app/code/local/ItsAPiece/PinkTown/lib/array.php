@@ -15,6 +15,24 @@ function df_array($v) {return is_array($v) ? $v : [$v];}
 function df_ita($t) {return is_array($t) ? $t : iterator_to_array($t);}
 
 /**
+ * Функция возвращает null, если массив пуст.
+ * Если использовать @see end() вместо @see df_last(),
+ * то указатель массива после вызова end сместится к последнему элементу.
+ * При использовании @see df_last() смещения указателя не происходит,
+ * потому что в @see df_last() попадает лишь копия массива.
+ *
+ * Обратите внимание, что неверен код
+ *	$result = end($array);
+ *	return (false === $result) ? null : $result;
+ * потому что если @uses end() вернуло false, это не всегда означает сбой метода:
+ * ведь последний элемент массива может быть равен false.
+ * http://www.php.net/manual/en/function.end.php#107733
+ * @param mixed[] $array
+ * @return mixed|null
+ */
+function df_last(array $array) {return !$array ? null : end($array);}
+
+/**
  * Раньше функция @see dfa() была универсальной:
  * она принимала в качестве аргумента $entity как массивы, так и объекты.
  * В 99.9% случаев в качестве параметра передавался массив.

@@ -54,6 +54,15 @@ final class Row {
 	function desc() {return $this->v('short_description');}
 
 	/**
+	 * 2018-12-07
+	 * Magento uses the «Black Coating» name,
+	 * the `Drop_Ship_Product_Feed.csv` file uses the «Black Material» name.
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return string
+	 */
+	function material() {return str_replace('Black Material', 'Black Coating', $this->v('material'));}
+
+	/**
 	 * 2018-12-06
 	 * @used-by \ItsAPiece\PinkTown\Updater::uName()
 	 * @return string
