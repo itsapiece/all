@@ -2,10 +2,12 @@
 /**
  * 2018-12-06
  * @param string|mixed[] $m
+ * @param mixed[]|string $p [optional]
  * @param string $file [optional]
  */
-function df_log($m, $file = 'mage2pro.log') {
-	$m = (!is_array($m) ? $m : df_json_encode($m)) . "\n";
+function df_log($m, $p = [], $file = 'mage2pro.log') {
+	list($p, $file) = is_array($p) ? [$p, $file] : [[], $p];
+	$m = (!is_array($m) ? (!$p ? $m : vsprintf($m, $p)) : df_json_encode($m)) . "\n";
 	if (df_my()) {
 		echo $m;
 	}

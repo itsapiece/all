@@ -70,12 +70,6 @@ final class Row {
 	function name() {return $this->v('title');}
 
 	/**
-	 * 2018-12-06
-	 * @return string
-	 */
-	function sku() {return $this->v('sku');}
-
-	/**
 	 * 2018-12-07
 	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
 	 * @return int
@@ -88,6 +82,23 @@ final class Row {
 	 * @return string
 	 */
 	function size() {return str_replace('  inches', ' inches', $this->v('size'));}
+
+	/**
+	 * 2018-12-06
+	 * @used-by \ItsAPiece\PinkTown\A\Name::p()
+	 * @used-by \ItsAPiece\PinkTown\Importer::p()
+	 * @return string
+	 */
+	function sku() {return $this->v('sku');}
+
+	/**
+	 * 2018-12-07
+	 * Sometimes tags in the `Drop_Ship_Product_Feed.csv` file
+	 * have a space at the beginning, e.g.: « Barefoot Sandals».
+	 * @used-by \ItsAPiece\PinkTown\Updater::p()
+	 * @return string[]
+	 */
+	function tags() {return df_trim(explode('^', $this->v('tags')));}
 
 	/**
 	 * 2018-12-07

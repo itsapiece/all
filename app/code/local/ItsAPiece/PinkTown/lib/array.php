@@ -46,6 +46,16 @@ function df_last(array $array) {return !$array ? null : end($array);}
 function dfa(array $a, $k, $d = null) {return isset($a[$k]) ? $a[$k] : $d;}
 
 /**
+ * 2016-09-02
+ * @see dfa_deep_unset()
+ * @uses array_flip() корректно работает с пустыми массивами.
+ * @param array(string => mixed) $a
+ * @param string[] $keys
+ * @return array(string => mixed)
+ */
+function dfa_unset(array $a, array $keys) {return array_diff_key($a, array_flip($keys));}
+
+/**
  * 2017-02-18
  * [array|callable, array|callable] => [array, callable]
  * @param callable|array(int|string => mixed)|array[]\Traversable $a
