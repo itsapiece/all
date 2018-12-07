@@ -26,14 +26,14 @@ final class Tags {
         if ($add) {
         	df_log("{$p->getSku()}: adding tags: %s." . implode(', ', df_quote($add)));
 			foreach ($add as $ts) {  /** @var string $ts */
-				if (!dfa(self::mapAll(), $ts)) {
-					$t = \Mage::getModel('tag/tag'); /** @var T $t */
+				if ($t = dfa(self::mapAll(), $ts)) { /** @var T $t */
+					$t = \Mage::getModel('tag/tag');
 					$t->setName($ts);
 					$t->setStatus(T::STATUS_APPROVED);
 					$t->save();
 					self::$_mapAll[$ts] = $t;
-					$t->saveRelation($p->getId(), null, $storeId);
 				}
+				$t->saveRelation($p->getId(), null, $storeId);
 			}
 		}
 		// 2018-12-07 I think we do not need to delete manually added tags.

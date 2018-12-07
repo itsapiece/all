@@ -93,12 +93,13 @@ final class Row {
 
 	/**
 	 * 2018-12-07
-	 * Sometimes tags in the `Drop_Ship_Product_Feed.csv` file
+	 * 1) Sometimes tags in the `Drop_Ship_Product_Feed.csv` file
 	 * have a space at the beginning, e.g.: « Barefoot Sandals».
+	 * 2) The `Drop_Ship_Product_Feed.csv` file uses 2 different tag delimeters in different rows: `^` and `,`.
 	 * @used-by \ItsAPiece\PinkTown\Updater::p()
 	 * @return string[]
 	 */
-	function tags() {return df_trim(explode('^', $this->v('tags')));}
+	function tags() {return df_clean(df_trim(df_explode_multiple(['^', ','], $this->v('tags'))));}
 
 	/**
 	 * 2018-12-07
