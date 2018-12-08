@@ -16,14 +16,19 @@ final class Importer {
 		ini_set('memory_limit', '-1');
 		ini_set('max_execution_time', '0');
 		Magmi::configure();
-		$f = array_map('str_getcsv',
-			explode("\r\n",
-				strtr(file_get_contents(\Mage::getBaseDir() . '/_my/Drop_Ship_Product_Feed.csv'), [
-					"\n\"" => '"'
-					,'additional_ Image_url' => 'additional_image_url'
-				])
+		df_log('Downloading...');
+		$f = array_map('str_getcsv', explode("\r\n", strtr(
+			file_get_contents(
+				df_my()
+				? \Mage::getBaseDir() . '/_my/Drop_Ship_Product_Feed.csv'
+				: 'https://www.dropbox.com/s/9hmm9lghx7vwt23/Drop_Ship_Product_Feed.csv?dl=1'
 			)
-		);
+			,[
+				"\n\"" => '"'
+				,'additional_ Image_url' => 'additional_image_url'
+			]
+		)));
+		df_log('Processing...');
 		$keys = array_shift($f);
 		$f = array_filter($f, function($v) {return '' !== trim($v[0]);});
 		$f = array_map(function($v) use($keys) {return array_combine($keys, $v);}, $f);
