@@ -9,8 +9,9 @@ final class Desc {
 	 * @param string $new
 	 */
 	static function p(P $p, $new) {
-		$prevL = $p['description']; /** @var string $prevL */
-		$prevS = $p['short_description']; /** @var string $prevL */
+		/** 2018-12-09  use @uses strval(() to convert `null` to ''. */
+		$prevL = strval($p['description']); /** @var string $prevL */
+		$prevS = strval($p['short_description']); /** @var string $prevL */
 		/**
 		 * 2018-12-06
 		 * Only a few products have a short description in Magento.
@@ -31,11 +32,8 @@ final class Desc {
 			//df_log("{$this->_p->getSku()}: $prevS");
 		}
 		if ($new !== $prevL) {
-			/*df_log([
-				'sku' => $this->_p->getSku()
-				,'new' => $new
-				,'prevL' => $prevL
-			]);*/
+			df_log(['sku' => $p->getSku(), 'new' => $new, 'prevL' => $prevL]);
+			$p->setData('description', $new);
 		}
 		/*df_log([
 			'new' => $new
@@ -44,5 +42,3 @@ final class Desc {
 		]);*/
 	}
 }
-
-

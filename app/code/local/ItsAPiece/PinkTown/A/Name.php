@@ -54,14 +54,22 @@ final class Name {
 			 * 1) What should the module do in this case? Rewrite the longer name?
 			 * 2) How did you produce the longer name in the previous time? Did you set in manually?»
 			 * https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_1b21b749fe8638366eb74d2a4f8f9a65
+			 *
+			 * 2018-12-09
+			 * «not sure about name.
+			 * No, it was not set maunally.
+			 * I don't know how my previous prorammer uploaed file,
+			 * I believe he created a script to scrap and create file from wholesaler website
+			 * before they stated providing csv file feed.
+			 * As for what should be done, I think it should right the longer description
+			 * we can keep it shorter if its eaiser.
+			 * what's your suggestion?»
 			 */
 			!df_contains($prev, $name)
 		) {
-			//df_log("Old Name: {$this->_p->getName()}");
-			//df_log("New name: {$name}");
+			df_log("Old name: {$p->getName()}");
+			df_log("New name: {$name}");
 			$p->setData('name', $name);
 		}
 	}
 }
-
-
