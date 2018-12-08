@@ -11,34 +11,75 @@ final class Tags {
 	 * @param string[] $new
 	 */
 	static function p(P $p, $new) {
-		$tagsPrev = self::c(); /** @var TC $tagsPrev */
-		$tagsPrev->addProductFilter($p->getId());
-        $mapPrev = self::map($tagsPrev); /** @var array(string => T) $mapPrev */
-        $prev = array_keys($mapPrev);  /** @var string[] $prev */
-        $add = array_diff($new, $prev); /** @var string[] $add */
-        $del = array_diff($prev, $new); /** @var string[] $del */
+		/**
+		 * 2018-12-08
+		 * Previously I used the foloowing code to retrieve all tags of a product:
+		 * 		$tagsPrev = new TC;
+		 * 		// 2018-12-07 It prevents the failure:
+		 * 		// «Item (Mage_Tag_Model_Tag) with the same id "..." already exist».
+		 * 		$tagsPrev->addStoreFilter(self::storeId());
+		 * 		// 2018-12-07 It prevents the failure:
+		 * 		// «Unknown column 'relation.product_id' in 'where clause'».
+		 * 		$tagsPrev->joinRel();
+		 * 		$tagsPrev->addProductFilter($p->getId());
+		 * This code is not quite correct
+		 * because it loads the product's tags only for the self::storeId() store,
+		 * but in the `itsapiece.com` website tags are assigned not only to the  self::storeId() store,
+		 * but to the backend (0) store too.
+		 * Other side, we can not remove the `$tagsPrev->addStoreFilter(self::storeId());` expression,
+		 * because we will got the failure: «Item (Mage_Tag_Model_Tag) with the same id "..." already exist».
+		 * That is why we now use a custom DB query to retrieve all tags of a particular product.
+		 */
+		$sel = df_select()->from(['t' => df_table('tag/tag')], 't.name');  /** @var \Varien_Db_Select $sel */
+		$sel->joinInner(['r' => df_table('tag/relation')], 't.tag_id = r.tag_id');
+		$sel->where('? = r.product_id', $p->getId());
+		/**
+		 * 2018-12-08
+		 * 1) `$sel->distinct()` does not work properly here because Zend Framework translates it to:
+		 * 		SELECT DISTINCT `t`.`name`, `r`.*
+		 * instead of
+		 * 		SELECT DISTINCT `t`.`name`
+		 * 2) df_select()->from(['t' => df_table('tag/tag')], 'distinct(t.name)');
+		 * 		does not work properly too: it is translated to:
+		 * 		SELECT distinct(t.name), `r`.*
+		 */
+		$prev = array_unique(df_conn()->fetchCol($sel));  /** @var string[] $prev */
+        $prevU = array_map('mb_strtoupper', $prev); /** @var string[] $prevU */
+        $prevUMap = array_combine($prevU, $prev);  /** @var array(strinbg => string) $prevUMap */
+		/**
+		 * 2018-12-07
+		 * @see \Mage_Core_Model_Resource_Db_Abstract::_checkUnique() will not allow us to have multiple tags
+		 * in with the same name but in a different letters case: e.g.: «Clip on» and «Clip On».
+		 * That is why we need to use @uses mb_strtoupper().
+		 */
+		$newU = array_map('mb_strtoupper', $new); /** @var string[] $newU */
+        $newUMap = array_combine($newU, $new);  /** @var array(strinbg => string) $newU */
+        $addU = array_diff($newU, $prevU); /** @var string[] $addU */
+        $delU = array_diff($prevU, $newU); /** @var string[] $delU */
 		// 2018-12-07
 		// 3/4 of tags in the itsapiece.com website belong to the 1 store.
 		// 1/4 tags belong to the 0 store.
 		// So I decided to assign new tags to the 1 store.
 		// \Mage::app()->getStore()->getId() returns `1`;
         $storeId = self::storeId(); /** @var int $storeId */
-        if ($add) {
+        if ($addU) {
+        	$add = dfa_select($newUMap, $addU); /** @var string [] */
         	df_log("{$p->getSku()}: adding tags: %s.", [implode(', ', df_quote($add))]);
-			foreach ($add as $ts) {  /** @var string $ts */
-				if (!($t = dfa(self::mapAll(), $ts))) { /** @var T $t */
+			foreach ($addU as $tsU) {  /** @var string $tsU */
+				if (!($t = dfa(self::mapAll(), $tsU))) { /** @var T $t */
 					$t = \Mage::getModel('tag/tag');
-					$t->setName($ts);
+					$t->setName($newUMap[$tsU]);
 					$t->setStatus(T::STATUS_APPROVED);
 					$t->save();
-					self::$_mapAll[$ts] = $t;
+					self::$_mapAll[$tsU] = $t;
 				}
 				$t->saveRelation($p->getId(), null, $storeId);
 			}
 		}
 		// 2018-12-07 I think we do not need to delete manually added tags.
-		if (false && $del) {
-        	df_log("{$p->getSku()}: removing tags: %s." . implode(', ', df_quote($add)));
+		if (false && $delU) {
+        	$del = dfa_select($prevUMap, $delU); /** @var string[] $del */
+        	df_log("{$p->getSku()}: removing tags: %s." . implode(', ', df_quote($del)));
             df_conn()->delete(df_table('tag/relation'), [
             	'? = product_id' => $p->getId()
 				,'tag_id IN (?)' =>
@@ -50,28 +91,19 @@ final class Tags {
 
 	/**
 	 * 2018-12-07
-	 * @used-by mapAll()
-	 * @used-by p()
-	 * @return TC
-	 */
-	private static function c() {
-		$r = new TC; /** @var TC $r */
-		// 2018-12-07 It prevents the failure: «Item (Mage_Tag_Model_Tag) with the same id "..." already exist».
-		$r->addStoreFilter(self::storeId());
-		// 2018-12-07 It prevents the failure: «Unknown column 'relation.product_id' in 'where clause'».
-		$r->joinRel();
-		return $r;
-	}
-
-	/**
-	 * 2018-12-07
+	 * @see \Mage_Core_Model_Resource_Db_Abstract::_checkUnique() will not allow us to have multiple tags
+	 * in with the same name but in a different letters case: e.g.: «Clip on» and «Clip On».
+	 * That is why we need to use @uses mb_strtoupper().
 	 * @used-by mapAll()
 	 * @param TC $c
+	 * @param bool $u [optional]
 	 * @return array(string => TC)
 	 */
-	private static function map(TC $c) {return df_map_r($c->getItems(), function(T $t) {return [
-		$t->getName(), $t
-	];});}
+	private static function map(TC $c, $u = false) {return
+		df_map_r($c->getItems(), function(T $t) use($u) {return [
+			!$u ? $t->getName() : mb_strtoupper($t->getName()), $t
+		];})
+	;}
 
 	/**
 	 * 2018-12-07
@@ -79,7 +111,7 @@ final class Tags {
 	 */
 	private static function mapAll() {
 		if (null === self::$_mapAll) {
-			self::$_mapAll = self::map(self::c());
+			self::$_mapAll = self::map(new TC, true);
 		}
 		return self::$_mapAll;
 	}
