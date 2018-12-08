@@ -21,6 +21,9 @@ final class Importer {
 			file_get_contents(
 				df_my()
 				? \Mage::getBaseDir() . '/_my/Drop_Ship_Product_Feed.csv'
+				// 2018-12-09
+				// «spoke to provider. they confirmed the link will always remain the same»
+				// https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_d8708d21f658b497bc84f966f2d288ef
 				: 'https://www.dropbox.com/s/9hmm9lghx7vwt23/Drop_Ship_Product_Feed.csv?dl=1'
 			)
 			,[
