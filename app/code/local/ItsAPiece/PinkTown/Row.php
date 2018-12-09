@@ -61,6 +61,13 @@ final class Row {
 	function imgAdditional() {return $this->v('additional_image_url');}
 
 	/**
+	 * 2018-12-09
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return string
+	 */
+	function imgPrimary() {return $this->v('image1_url');}
+
+	/**
 	 * 2018-12-07
 	 * Magento uses the «Black Coating» name,
 	 * the `Drop_Ship_Product_Feed.csv` file uses the «Black Material» name.
