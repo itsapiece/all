@@ -15,6 +15,7 @@ final class Updater {
 		A\Images::p($p, $r);
 		A\Material::p($p, $r->material());
 		A\Name::p($p, $r);
+		A\Price::p($p, $r->price());
 		A\Qty::p($p, $r->qty());
 		A\Size::p($p, $r->size());
 		A\Tags::p($p, $r->tags());

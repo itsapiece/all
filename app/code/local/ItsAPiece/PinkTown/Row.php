@@ -55,14 +55,14 @@ final class Row {
 
 	/**
 	 * 2018-12-09
-	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @used-by \ItsAPiece\PinkTown\A\Images::p()
 	 * @return string
 	 */
 	function imgAdditional() {return $this->v('additional_image_url');}
 
 	/**
 	 * 2018-12-09
-	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @used-by \ItsAPiece\PinkTown\A\Images::p()
 	 * @return string
 	 */
 	function imgPrimary() {return $this->v('image1_url');}
@@ -82,6 +82,13 @@ final class Row {
 	 * @return string
 	 */
 	function name() {return $this->v('title');}
+	
+	/**
+	 * 2018-12-09
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return float
+	 */
+	function price() {return floatval($this->v('wholesale'));}	
 
 	/**
 	 * 2018-12-07

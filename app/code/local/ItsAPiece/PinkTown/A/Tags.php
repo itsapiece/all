@@ -130,5 +130,3 @@ final class Tags {
 	 */
 	private static $_mapAll;
 }
-
-
