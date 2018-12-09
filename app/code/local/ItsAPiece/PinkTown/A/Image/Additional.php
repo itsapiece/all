@@ -26,11 +26,20 @@ final class Additional {
 		 * @uses \Mage_Catalog_Model_Product::getMediaGalleryImages() does not return
 		 * the primary image for a product: it returns only the product's additional images.
 		 */
-		$prevAdditional = $p->getMediaGalleryImages(); /** @var C $prev */
+		$prev = $p->getMediaGalleryImages(); /** @var C $prev */
 		$p->setDataChanges($c);
 		I::$break = true;
-		if ($new && !$prevAdditional || !$prevAdditional->count()) {
-			df_log("[{$p->getSku()}] an additional image will be added");
+		if ($new && (!$prev || !$prev->count())) {
+			$f = sys_get_temp_dir() . '/' . basename($new); /** @var string $f */
+			unlink($f);
+			file_put_contents($f, file_get_contents($new));
+			/**
+			 * 2018-12-09
+			 * It works faster than `$p->addImageToMediaGallery($f, null, true);`
+			 * @see \Mage_Catalog_Model_Product::addImageToMediaGallery()
+			 */
+			$mediaB->addImage($p, $f, null, true, false);
+			df_log("[{$p->getSku()}] an additional image is added.");
 		}
 	}
 }
