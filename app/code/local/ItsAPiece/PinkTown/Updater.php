@@ -12,6 +12,7 @@ final class Updater {
 	static function p(P $p, Row $r) {
 		A\Color::p($p, $r->color());
 		A\Desc::p($p, $r->desc());
+		A\Image\Additional::p($p, $r->imgAdditional());
 		A\Material::p($p, $r->material());
 		A\Name::p($p, $r);
 		A\Qty::p($p, $r->qty());

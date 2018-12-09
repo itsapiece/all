@@ -109,5 +109,13 @@ final class Importer {
 		}
 	}
 
+	/**
+	 * 2018-0=12-09
+	 * @used-by p()
+	 * \Varien_Object::setData()
+	 * \Varien_Object::setDataChanges()
+	 * \Varien_Object::unsetData()
+	 * @var bool
+	 */
 	static $break = false;
 }
