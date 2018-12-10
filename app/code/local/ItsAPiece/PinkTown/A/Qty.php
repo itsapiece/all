@@ -12,12 +12,17 @@ final class Qty {
 	static function p(P $p, $new) {
 		$s = \Mage::getModel('cataloginventory/stock_item'); /** @var S $s */
 		$s->loadByProduct($p);
-		$prev = intval($s->getQty()); /** @var int $prev */
-		if ($prev !== $new) {
-			$s->setQty($new);
-			$s->setIsInStock(!!$new);
-			$s->save();
-			//df_log(['sku' => $p->getSku(), 'new' => $new, 'prev' => $prev]);
+		if (!$s->getId()) {
+			// 2018-12-10 The product is just created, so it does not have a stock object yet.
+			$p->addData(['is_in_stock' => !!$new, 'qty' => $new]);
+		}
+		else {
+			$prev = intval($s->getQty()); /** @var int $prev */
+			if ($prev !== $new) {
+				$s->setQty($new);
+				$s->setIsInStock(!!$new);
+				$s->save();
+			}
 		}
 	}
 }

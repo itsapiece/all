@@ -19,14 +19,13 @@ final class Category {
 				if (!($newC = dfa(self::$_mapAll, $new))) {  /** @var C $newC */
 					$newC = df_admin_call(function() use($new, $p) {
 						$more = self::$_mapAll['More'];  /** @var C $more */
-						$newC = new C;
-						$newC->addData([
+						$newC = new C([
 							'display_mode' => 'PRODUCTS'
 							,'is_active' => 1
 							,'is_anchor' => 1
 							,'name' => $new
-							,'path' => $more->getPath()
-							,'store_id' => \Mage::app()->getStore()->getId()
+							,'path' => $more['path']
+							,'store_id' => \Mage::app()->getStore()->getId()							
 						]);
 						return $newC->save();						
 					});

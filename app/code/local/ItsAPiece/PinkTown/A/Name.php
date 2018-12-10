@@ -5,7 +5,9 @@ use Mage_Catalog_Model_Product as P;
 // 2018-12-07
 final class Name {
 	/**
-	 * 2018-12-07
+	 * 2018-12-07  
+	 * @used-by \ItsAPiece\PinkTown\Inserter::p()   
+	 * @used-by \ItsAPiece\PinkTown\Updater::p()
 	 * @param P $p
 	 * @param R $r
 	 */

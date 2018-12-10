@@ -115,6 +115,7 @@ final class Row {
 	 * 2018-12-06
 	 * @used-by \ItsAPiece\PinkTown\A\Name::p()
 	 * @used-by \ItsAPiece\PinkTown\Importer::p()
+	 * @used-by \ItsAPiece\PinkTown\Inserter::p()
 	 * @return string
 	 */
 	function sku() {return $this->v('sku');}

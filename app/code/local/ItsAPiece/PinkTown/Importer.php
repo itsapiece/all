@@ -46,24 +46,22 @@ final class Importer {
 			try {
 				$r = new Row($d); /** @var Row $r */
 				$sku = $r->sku(); /** @var string $sku */
-				if ($p = dfa($pMap, $sku)) { /** @var P $p */
-					//df_log("Updating: $sku");
-					self::$break = false;
-					$p->setDataChanges(false);
-					self::$break = true;
-					Updater::p($p, $r);
-					if ($p->hasDataChanges()) {
-						$pr = number_format($c * 100 / $t, 2);
-						df_log("{$c}[{$pr}%] Saving {$p->getSku()} «{$p->getName()}»");
-						$p->save();
-					}
+				if (!($p = dfa($pMap, $sku))) { /** @var P $p */
+					$p = Inserter::p($r);
 				}
-				else {
-					//df_log("Inserting: $sku");
-					//Inserter::p($d);
+				self::$break = false;
+				$p->setDataChanges(false);
+				self::$break = true;
+				Updater::p($p, $r);
+				if ($p->hasDataChanges()) {
+					$pr = number_format($c * 100 / $t, 2);
+					df_log("{$c}[{$pr}%] Saving {$p->getSku()} «{$p->getName()}»");
+					$p->save();
 				}
 			}
-			catch (\Exception $e) {df_log($e->getMessage() ?: 'error');}
+			catch (\Exception $e) {
+				df_log($e->getMessage() ?: $e->getTraceAsString(), [], 'mage2pro.error.log');
+			}
 			//\Mage::log($d['sku'], null, isset($pMap[$d['sku']]) ? 'exist.log' : 'new.log');
 		}
 		df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
