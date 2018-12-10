@@ -27,7 +27,13 @@ final class Category {
 							,'path' => $more['path']
 							,'store_id' => \Mage::app()->getStore()->getId()							
 						]);
-						return $newC->save();						
+						/**
+						 * 2018-12-10
+						 * It is required, because initializing a model within its constructor 
+						 * does not set the @see \Varien_Object::$_hasDataChanges property to `true`
+						 */
+						$newC->setDataChanges(true);
+						return $newC->save();
 					});
 					self::$_mapAll[$new] = $newC;
 				}
