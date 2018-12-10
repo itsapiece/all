@@ -14,7 +14,7 @@ final class Qty {
 		$s->loadByProduct($p);
 		if (!$s->getId()) {
 			// 2018-12-10 The product is just created, so it does not have a stock object yet.
-			$p->addData(['is_in_stock' => !!$new, 'qty' => $new]);
+			$p->addData(['stock_data' => ['is_in_stock' => !!$new, 'qty' => $new]]);
 		}
 		else {
 			$prev = intval($s->getQty()); /** @var int $prev */

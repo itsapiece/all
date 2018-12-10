@@ -16,15 +16,17 @@ final class Category {
 			$prev = array_keys(self::map($p->getCategoryCollection())); /** @var string[] $prev */
 			if (!in_array($new, $prev)) {
 				self::mapAll();
+				$defaultC = self::$_mapAll['Default Category'];  /** @var C $defaultC */
+				$moreC = self::$_mapAll['More'];  /** @var C $moreC */
+				$defaultIds = df_int([$moreC->getId(), $defaultC->getId()]); /** @var int[] */
 				if (!($newC = dfa(self::$_mapAll, $new))) {  /** @var C $newC */
-					$newC = df_admin_call(function() use($new, $p) {
-						$more = self::$_mapAll['More'];  /** @var C $more */
+					$newC = df_admin_call(function() use($moreC, $new, $p) {
 						$newC = new C([
 							'display_mode' => 'PRODUCTS'
 							,'is_active' => 1
 							,'is_anchor' => 1
 							,'name' => $new
-							,'path' => $more['path']
+							,'path' => $moreC['path']
 							,'store_id' => \Mage::app()->getStore()->getId()							
 						]);
 						/**
@@ -37,7 +39,9 @@ final class Category {
 					});
 					self::$_mapAll[$new] = $newC;
 				}
-				$p->setCategoryIds(array_merge($p->getCategoryIds(), [$newC->getId()]));
+				$p->setCategoryIds(array_unique(array_merge(
+					df_int($p->getCategoryIds()), df_int([$newC->getId()]), $defaultIds
+				)));
 				df_log(['sku' => $p->getSku(), 'new' => $new, 'current' => [implode(', ', df_quote($prev))]]);
 			}
 		}

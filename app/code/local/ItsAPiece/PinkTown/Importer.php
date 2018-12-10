@@ -41,6 +41,7 @@ final class Importer {
 		/** @var array(string => P) $pMap */
 		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		$t = count($f); $c = 0;
+		$added = 0;
 		foreach ($f as $d) { /** @var array(string => mixed) $d */
 			$c++;
 			try {
@@ -48,6 +49,7 @@ final class Importer {
 				$sku = $r->sku(); /** @var string $sku */
 				if (!($p = dfa($pMap, $sku))) { /** @var P $p */
 					$p = Inserter::p($r);
+					$added++;
 				}
 				self::$break = false;
 				$p->setDataChanges(false);
@@ -57,6 +59,9 @@ final class Importer {
 					$pr = number_format($c * 100 / $t, 2);
 					df_log("{$c}[{$pr}%] Saving {$p->getSku()} «{$p->getName()}»");
 					$p->save();
+				}
+				if ($added) {
+					break;
 				}
 			}
 			catch (\Exception $e) {
