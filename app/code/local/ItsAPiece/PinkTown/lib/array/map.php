@@ -28,6 +28,7 @@ function df_map($a1, $a2, $pAppend = [], $pPrepend = [], $keyPosition = 0, $retu
 	/** @var callable $callback */
 	/** @var array(int|string => mixed)|\Traversable $array */
 	list($array, $callback) = dfaf($a1, $a2);
+	$array = df_ita($array);
 	/** @var array(int|string => mixed) $result */
 	if (!$pAppend && !$pPrepend && 0 === $keyPosition && !$returnKey) {
 		$result = array_map($callback, $array);

@@ -10,6 +10,7 @@ final class Updater {
 	 * @param Row $r
 	 */
 	static function p(P $p, Row $r) {
+		A\Category::p($p, $r->category());
 		A\Color::p($p, $r->color());
 		A\Desc::p($p, $r->desc());
 		A\Images::p($p, $r);

@@ -37,6 +37,13 @@ final class Row {
 	 * @return array(string => mixed)
 	 */
 	function a() {return $this->_a;}
+	
+	/**
+	 * 2018-12-09
+	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
+	 * @return string
+	 */
+	function category() {return str_replace('Do It Yourself !', 'Do It Yourself!', $this->v('subcategory'));}
 
 	/**
 	 * 2018-12-07

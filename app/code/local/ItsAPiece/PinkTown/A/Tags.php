@@ -97,7 +97,7 @@ final class Tags {
 	 * @used-by mapAll()
 	 * @param TC $c
 	 * @param bool $u [optional]
-	 * @return array(string => TC)
+	 * @return array(string => T)
 	 */
 	private static function map(TC $c, $u = false) {return
 		df_map_r($c->getItems(), function(T $t) use($u) {return [
@@ -107,7 +107,7 @@ final class Tags {
 
 	/**
 	 * 2018-12-07
-	 * @return array(string => TC)
+	 * @return array(string => T)
 	 */
 	private static function mapAll() {
 		if (null === self::$_mapAll) {
@@ -126,7 +126,7 @@ final class Tags {
 	/**
 	 * 2018-12-07
 	 * @used-by mapAll()
-	 * @var array(string => TC)
+	 * @var array(string => T)
 	 */
 	private static $_mapAll;
 }
