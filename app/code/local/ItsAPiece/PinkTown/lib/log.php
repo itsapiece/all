@@ -8,7 +8,8 @@
 function df_log($m, $p = [], $file = 'mage2pro.log') {
 	list($p, $file) = is_array($p) ? [$p, $file] : [[], $p];
 	$m = (!is_array($m) ? (!$p ? $m : vsprintf($m, $p)) : df_json_encode($m)) . "\n";
-	if (df_my()) {
+	$argv = dfa($GLOBALS, 'argv'); /** @var mixed[] $argv */
+	if (df_my() || ($argv && '-v' === dfa($argv, 1))) {
 		echo $m;
 	}
 	mkdir($dir = \Mage::getBaseDir('var') . "/log");

@@ -13,8 +13,9 @@ final class Importer {
 	 */
 	function p() {
 		self::init();
-		ini_set('memory_limit', '-1');
+		ini_set('display_errors', 1);
 		ini_set('max_execution_time', '0');
+		ini_set('memory_limit', '-1');
 		Magmi::configure();
 		df_log('Downloading...');
 		$f = array_map('str_getcsv', explode("\r\n", strtr(
@@ -41,15 +42,18 @@ final class Importer {
 		/** @var array(string => P) $pMap */
 		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		$t = count($f); $c = 0;
-		$added = 0;
+		$changed = false;
 		foreach ($f as $d) { /** @var array(string => mixed) $d */
 			$c++;
 			try {
 				$r = new Row($d); /** @var Row $r */
 				$sku = $r->sku(); /** @var string $sku */
+				/*if ('SMN14129RYBGD' !== $sku) {
+					continue;
+				} */
 				if (!($p = dfa($pMap, $sku))) { /** @var P $p */
 					$p = Inserter::p($r);
-					$added++;
+					$changed = true;
 				}
 				self::$break = false;
 				$p->setDataChanges(false);
@@ -59,18 +63,17 @@ final class Importer {
 					$pr = number_format($c * 100 / $t, 2);
 					df_log("{$c}[{$pr}%] Saving {$p->getSku()} «{$p->getName()}»");
 					$p->save();
-				}
-				if ($added) {
-					break;
+					$changed = true;
 				}
 			}
 			catch (\Exception $e) {
 				df_log($e->getMessage() ?: $e->getTraceAsString(), [], 'mage2pro.error.log');
 			}
-			//\Mage::log($d['sku'], null, isset($pMap[$d['sku']]) ? 'exist.log' : 'new.log');
 		}
-		df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
-		df_log('Reindexing...');
+		if ($changed) {
+			df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
+			df_log('Reindexing...');
+		}
 		$i = \Mage::getSingleton('index/indexer'); /** @var I $i = */
 		$ipc = $i->getProcessesCollection(); /** @var IPC $ipc */
 		foreach ($ipc as $ip) {  /** @var IP $ip */

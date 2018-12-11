@@ -11,8 +11,10 @@ final class Price {
 	static function p(P $p, $new) {
 		$prev = floatval($p->getPrice()); /** @var float $prev */
 		if ($prev !== $new) {
-			//$p->setData('price', $new);
-			//df_log(['sku' => $p->getSku(), 'prev' => $prev, 'new' => $new]);
+			// 2018-12-11
+			// https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_40b7b4659233920a9ad79e2575cfcbb9
+			$p->setData('price', $new);
+			df_log(['sku' => $p->getSku(), 'prev' => $prev, 'new' => $new]);
 		}
 	}
 }

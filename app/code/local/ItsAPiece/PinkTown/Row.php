@@ -92,10 +92,12 @@ final class Row {
 	
 	/**
 	 * 2018-12-09
+	 * 2018-12-11
+	 * https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_40b7b4659233920a9ad79e2575cfcbb9
 	 * @used-by \ItsAPiece\PinkTown\Updater::_p()
 	 * @return float
 	 */
-	function price() {return floatval($this->v('wholesale'));}	
+	function price() {return 2 * floatval($this->v('wholesale'));}
 
 	/**
 	 * 2018-12-07
