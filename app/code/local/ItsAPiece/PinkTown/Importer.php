@@ -48,9 +48,6 @@ final class Importer {
 			try {
 				$r = new Row($d); /** @var Row $r */
 				$sku = $r->sku(); /** @var string $sku */
-				/*if ('SMN14129RYBGD' !== $sku) {
-					continue;
-				} */
 				if (!($p = dfa($pMap, $sku))) { /** @var P $p */
 					$p = Inserter::p($r);
 					$changed = true;

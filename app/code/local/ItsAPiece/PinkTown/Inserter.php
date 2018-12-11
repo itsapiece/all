@@ -26,6 +26,7 @@ final class Inserter {
 			A\Name::p($p, $r);
 			df_log("Creating product {$p->getSku()} «{$p->getName()}»");
 			$p->save();
+			A\Membership::p($p);
 			return $p;
 		});
 	}
