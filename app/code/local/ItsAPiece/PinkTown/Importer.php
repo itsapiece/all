@@ -43,7 +43,13 @@ final class Importer {
 		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		$t = count($f); $c = 0;
 		$changed = false;
-		$toDelete = array_diff(array_keys($pMap), array_column($f, 'sku'));  /** @var string[] $toDelete */
+		$toDelete = array_filter(
+			array_diff(array_keys($pMap), array_column($f, 'sku'))
+			,function($sku) use($pMap) {
+				$p = $pMap[$sku]; /** @var P $p */
+				return !array_intersect(df_int($p->getCategoryIds()), [6, 27, 44]);
+			}
+		); /** @var string[] $toDelete */
 		df_log('Products to delete: %s', [count($toDelete)]);
 		foreach ($toDelete as $sku) {
 			$p = $pMap[$sku]; /** @var P $p */
