@@ -65,7 +65,7 @@ final class Images {
 	private static function new_($url) {
 		$r = sys_get_temp_dir() . '/' . basename($url); /** @var string $f */
 		unlink($r);
-		file_put_contents($r, file_get_contents($url));
+		imagejpeg(imagecreatefromjpeg($url), $r, 70);
 		return $r;
 	}	
 }
