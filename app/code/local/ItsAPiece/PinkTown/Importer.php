@@ -1,6 +1,7 @@
 <?php
 namespace ItsAPiece\PinkTown;
 use Mage_Catalog_Model_Product as P;
+use Mage_Catalog_Model_Product_Image as PI;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Index_Model_Indexer as I;
 use Mage_Index_Model_Process as IP;
@@ -43,6 +44,18 @@ final class Importer {
 		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		$t = count($f); $c = 0;
 		$changed = false;
+		$toDelete = array_diff(array_keys($pMap), array_column($f, 'sku'));  /** @var string[] $toDelete */
+		df_log('Products to delete: %s', [count($toDelete)]);
+		foreach ($toDelete as $sku) {
+			$p = $pMap[$sku]; /** @var P $p */
+			Deleter::p($p);
+			unset($pMap[$sku]);
+		}
+		if ($toDelete) {
+			df_log('Deleting images cache...');
+			$pi = \Mage::getModel('catalog/product_image'); /** @var PI $pi */
+			$pi->clearCache();
+		}
 		foreach ($f as $d) { /** @var array(string => mixed) $d */
 			$c++;
 			try {
