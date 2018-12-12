@@ -82,14 +82,12 @@ final class Importer {
 		if ($changed || $toDelete) {
 			df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
 			df_log('Reindexing...');
+			$i = \Mage::getSingleton('index/indexer'); /** @var I $i = */
+			$ipc = $i->getProcessesCollection(); /** @var IPC $ipc */
+			foreach ($ipc as $ip) {  /** @var IP $ip */
+				$ip->reindexEverything();
+			}
 		}
-		$i = \Mage::getSingleton('index/indexer'); /** @var I $i = */
-		$ipc = $i->getProcessesCollection(); /** @var IPC $ipc */
-		foreach ($ipc as $ip) {  /** @var IP $ip */
-			$ip->reindexEverything();
-		}
-		//file_put_contents(\Mage::getBaseDir('var') . '/log/skus.log', implode("\n", array_column($f, 0)));
-		//xdebug_break();
 	}
 
 	/**
