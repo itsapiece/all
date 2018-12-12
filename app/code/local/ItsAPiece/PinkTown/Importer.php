@@ -17,7 +17,6 @@ final class Importer {
 		ini_set('display_errors', 1);
 		ini_set('max_execution_time', '0');
 		ini_set('memory_limit', '-1');
-		Magmi::configure();
 		df_log('Downloading...');
 		$f = array_map('str_getcsv', explode("\r\n", strtr(
 			file_get_contents(
@@ -80,7 +79,7 @@ final class Importer {
 				df_log($e->getMessage() ?: $e->getTraceAsString(), [], 'mage2pro.error.log');
 			}
 		}
-		if ($changed) {
+		if ($changed || $toDelete) {
 			df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
 			df_log('Reindexing...');
 		}
