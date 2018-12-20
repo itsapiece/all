@@ -43,20 +43,26 @@ final class Importer {
 		$pMap = df_map_r($pc->getItems(), function(P $p) {return [$p->getSku(), $p];});
 		$t = count($f); $c = 0;
 		$changed = false;
+		$membershipProductIds = df_int(array_unique(df_conn()->fetchCol(
+			df_select()->from(df_table('membership/package'), 'product_id')
+		))); /** @var int[] $membershipProductIds */
 		// 2018-12-12
 		// «did you delete the current items before you import the update?
 		// the moduel would have to delete the current items»
 		// https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_fcc2e6ceea4f2674059727aa84181816
 		$toDelete = array_filter(
 			array_diff(array_keys($pMap), array_column($f, 'sku'))
-			,function($sku) use($pMap) {
+			,function($sku) use($pMap, $membershipProductIds) {
 				$p = $pMap[$sku]; /** @var P $p */
 				// 2018-12-12
 				// «the moduel would have to delete the current items
 				// (except the $5 jewelry, $10 jewlery set and $1 dream)
 				// those items are from my in-house inventory.»
 				// https://www.upwork.com/messages/rooms/room_a1e68b73e6a1422b3a0fb3b7c5d03a69/story_fcc2e6ceea4f2674059727aa84181816
-				return !array_intersect(df_int($p->getCategoryIds()), [6, 27, 44]);
+				return
+					!in_array(intval($p->getId()), $membershipProductIds)
+					&& !array_intersect(df_int($p->getCategoryIds()), [6, 27, 44])
+				;
 			}
 		); /** @var string[] $toDelete */
 		df_log('Products to delete: %s', [count($toDelete)]);

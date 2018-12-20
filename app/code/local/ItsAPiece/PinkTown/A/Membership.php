@@ -1,8 +1,6 @@
 <?php
 namespace ItsAPiece\PinkTown\A;
 use Mage_Catalog_Model_Product as P;
-use Magestore_Membership_Model_Mysql4_Packageproduct_Collection as MC;
-use Magestore_Membership_Model_Packageproduct as M;
 // 2018-12-11
 final class Membership {
 	/**
