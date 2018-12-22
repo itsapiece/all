@@ -108,7 +108,10 @@ final class Importer {
 				df_log($e->getMessage() ?: $e->getTraceAsString(), [], 'mage2pro.error.log');
 			}
 		}
-		if ($changed || $toDelete) {
+		// 2018-12-22
+		// I have added the !df_my() condition because sometimes the other conditions do not evauate properly.
+		// So it is just a quick and dirty workaround.
+		if ($changed || $toDelete || !df_my()) {
 			df_log('Cleaning the cache...'); \Mage::app()->cleanCache();
 			df_log('Reindexing...');
 			$i = \Mage::getSingleton('index/indexer'); /** @var I $i = */
