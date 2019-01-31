@@ -45,7 +45,11 @@ final class Importer {
 		;});
 		foreach ($productsWithoutSku as $p) {
 			Deleter::p($p);
-		}	
+		}
+		$t = df_table('catalog_product_entity_int'); /** @var string $t */
+		/** @var int $max */
+		$max = intval(df_conn()->fetchOne(df_select()->from($t, [new \Zend_Db_Expr('MAX(value_id)')])));
+		df_conn()->query("ALTER TABLE $t AUTO_INCREMENT = $max;");
 		/** @var P[] $productsWithoutSku */
 		$productsWithSku = array_filter($pc->getItems(), function(P $p) {return !!$p->getSku();});
 		/** @var array(string => P) $pMap */
